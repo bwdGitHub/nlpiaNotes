@@ -1,9 +1,12 @@
 import numpy as np
+import pandas as pd
 def encode(corpus,document):
     # encode a document in the one-hot vectors corresponding to the vocabulary of corpus
     # both inputs are assumed to be strings
-    vocab = getVocab(corpus)    
-    return encodeDocument(vocab,document)
+    vocab = getVocab(corpus)
+    onehot = encodeDocument(vocab,document)
+    df = pd.DataFrame(onehot,columns=vocab+['out_of_vocab'])
+    return df
 
 def getVocab(s):
     tokens = tokenize(s)
