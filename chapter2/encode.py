@@ -41,5 +41,24 @@ def encodeDocument(voc,doc):
             arr[i,len(voc)]=1
     return arr
 
+def sentence2dict(sentence):
+    return dict([(token,1) for token in tokenize(sentence)])
+
+def encodeAsBinaryDataFrame(sentence,i):
+    # do everything on one line, because why not, it's not like this was intended to be read.
+    # copied this from the book.
+    #
+    # this is really just a long way to say "give me a dataframe with columns named via the tokens and 1 in every position."
+    df = pd.DataFrame(pd.Series(sentence2dict(sentence)),columns=['sent{}'.format(i)]).T
+    return df
+
+def encodeCorpusAsBinaryDataFrame(corpus):
+    sentences = corpus.split('\n')
+    enc = {}
+    for i,sent in enumerate(sentences):
+        enc['sent{}'.format(i)] = sentence2dict(sent)
+    df = pd.DataFrame.from_records(enc).fillna(0).astype(int).T
+    return df
+
 def initArray(n,m):
     return np.zeros((n,m),int)
