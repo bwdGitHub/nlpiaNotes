@@ -60,5 +60,20 @@ def encodeCorpusAsBinaryDataFrame(corpus):
     df = pd.DataFrame.from_records(enc).fillna(0).astype(int).T
     return df
 
+def similarity(s1,s2):
+    # simple dot-product similarity
+    # note that it's irrelevant for this computation that s1 and s2 could come from some larger corpus
+    # any token not in s1 or s2 cannot contribute to the computation, in the current metric
+    # essentially all the unique tokens form an orthonormal basis in the one-hot encoding
+
+    # this is a round about way for counting the number of shared tokens between two sentences.
+    # but it's a nice way to introduce dot products as a way of comparing vectors
+
+    # note - in practice it'd probably be better to circumvent the dataframe here
+    # but this what the book does and I don't have a convenient function to rturn the np arrays.
+    df = encodeCorpusAsBinaryDataFrame(s1+"\n"+s2)
+    return df.T.sent0.dot(df.T.sent1)
+
+
 def initArray(n,m):
     return np.zeros((n,m),int)
