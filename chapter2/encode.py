@@ -16,6 +16,18 @@ def tokenize(s):
     # naive tokenizer
     return str.split(s)
 
+def lowMemBinaryEncodeDocument(voc,doc):
+    # only store the frequency info of tokens in doc using a dict.
+    # this is clearly less memory intense than storing the vectors
+    enc = {}
+    tokens = tokenize(doc)
+    for tok in tokens:
+        if tok in voc:
+            enc[tok] = 1
+        else:
+            enc['out_out_vocab']=1
+    return enc
+
 def encodeDocument(voc,doc):
     tokens = tokenize(doc)
     # add an "out of vocabulary" element
