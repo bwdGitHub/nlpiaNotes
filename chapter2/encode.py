@@ -22,6 +22,8 @@ def lowMemBinaryEncodeDocument(voc,doc):
     enc = {}
     tokens = tokenize(doc)
     for tok in tokens:
+        # use voc as the set of tokens you care about
+        # alternative is to collect all of them and decide a vocab after the fact.
         if tok in voc:
             enc[tok] = 1
         else:
