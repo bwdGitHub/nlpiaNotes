@@ -1,5 +1,11 @@
 import re
 from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+
+#general notes - normalization and vocab compression always comes at a cost, or a trade
+# more recall for less precision
+# lower memory for less expressivity
+# for IR/search the loss of precision for high recall can be mitigated by ranking algorithms
 
 def naiveCaseNormalization(document):
     # simple normalization
@@ -22,3 +28,9 @@ def nltkStemmer(document):
     # wrapper for nltk Porter stemmer.
     stemmer = PorterStemmer()
     return [stemmer.stem(token) for token in document]
+
+def lemmatize(document):
+    #wrapper for nltk wordnet lemmatizer
+    # this does better when each token in document has a pos tag.
+    lemmatizer = WordNetLemmatizer()
+    return [lemmatizer.lemmatize(token) for token in document]
