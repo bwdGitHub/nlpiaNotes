@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+from tokenizers import naiveTokenize as tokenize
+
 def encode(corpus,document):
     # encode a document in the one-hot vectors corresponding to the vocabulary of corpus
     # both inputs are assumed to be strings
@@ -11,10 +13,6 @@ def encode(corpus,document):
 def getVocab(s):
     tokens = tokenize(s)
     return sorted(set(tokens))
-
-def tokenize(s):
-    # naive tokenizer
-    return str.split(s)
 
 def lowMemBinaryEncodeDocument(voc,doc):
     # only store the frequency info of tokens in doc using a dict.
