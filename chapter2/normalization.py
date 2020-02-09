@@ -1,3 +1,6 @@
+import re
+from nltk.stem.porter import PorterStemmer
+
 def naiveCaseNormalization(document):
     # simple normalization
     return [token.lower() for token in document]
@@ -11,4 +14,11 @@ def slightlyLessNaiveNormalization(document):
             document[i] = document[i].lower()
     return document
 
+def sStemmer(document):
+    # stem plurals and 's
+    return [re.findall('^(.*ss|.*?)(s)?$',token)[0][0].strip("'") for token in document]
 
+def nltkStemmer(document):
+    # wrapper for nltk Porter stemmer.
+    stemmer = PorterStemmer()
+    return [stemmer.stem(token) for token in document]
