@@ -47,6 +47,34 @@ class bag_of_words:
 
         return v
 
+    def docFreq(self):
+        v = copy.copy(self.zero)
+        for key in v:
+            counter = 0
+            for bag in self.bag:
+                if key in bag:
+                    counter+=1
+            v[key] = counter
+        return v
+
+    def tfidf(self,word,i):
+        bag = self.bag[i]
+        v = self.tfVectorByDict(i)
+        df = self.docFreq()
+        if word not in df or df[word]<1e-10:
+            return 0.0
+        else:
+            return v[word]/df[word]
+
+    def tfidfVector(self,i):
+        v = copy.copy(self.zero)
+        tf = self.tfVectorByDict(i)
+        df = self.docFreq()
+        bag = self.bag[i]
+        for word in bag:
+            v[word] = tf[word]/df[word]
+        return v
+
     def cosine_similarity(self,i,j):
         # simple cosine similarity between document i and j
         v = dict2array(self.tfVectorByDict(i))
