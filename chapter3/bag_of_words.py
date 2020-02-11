@@ -22,3 +22,10 @@ class bag_of_words:
         for i in range(len(self.bag)):
             tf.append(self.tfPerDoc(word,i))
         return tf
+    
+    def tfVector(self,i):
+        # return tf vector for document i
+        v = []
+        for token in self.lexicon:
+            v.append(self.tfPerDoc(token,i))
+        return v
