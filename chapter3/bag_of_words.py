@@ -1,6 +1,7 @@
 from collections import Counter
 from collections import OrderedDict
 import copy
+import numpy as np
 
 class bag_of_words:
     # a very simple bag of words implementation
@@ -45,3 +46,19 @@ class bag_of_words:
             v[token] = self.tfPerDoc(token,i)
 
         return v
+
+    def cosine_similarity(self,i,j):
+        # simple cosine similarity between document i and j
+        v = dict2array(self.tfVectorByDict(i))
+        w = dict2array(self.tfVectorByDict(j))
+        return cosine(v,w)
+
+
+def dict2array(d):
+    # helper for mapping dictionary values to np arrays
+    return np.array(list(d.values()))
+
+def cosine(v,w):
+    # compute the dot product of v/|v| and w/|w|
+    # i.e. cos(Angle(v,w))
+    return np.dot(v/np.linalg.norm(v),w/np.linalg.norm(w))
