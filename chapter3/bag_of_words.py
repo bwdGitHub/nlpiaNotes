@@ -55,6 +55,9 @@ class bag_of_words:
                 if key in bag:
                     counter+=1
             v[key] = counter
+        numDocs = len(self.bag)
+        for key in v:
+            v[key] /= numDocs
         return v
 
     def idf(self,word):
@@ -71,6 +74,12 @@ class bag_of_words:
             return 0.0
         else:
             return v[word]/df[word]
+
+    def logTfIdf(self,word,i):
+        bag = self.bag[i]
+        v = self.tfVectorByDict(i)
+        logIdf = self.logIdf(word)
+        return v[word]/logIdf
 
     def tfidfVector(self,i):
         v = copy.copy(self.zero)
