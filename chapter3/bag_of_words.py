@@ -2,6 +2,7 @@ from collections import Counter
 from collections import OrderedDict
 import copy
 import numpy as np
+import math
 
 class bag_of_words:
     # a very simple bag of words implementation
@@ -44,7 +45,6 @@ class bag_of_words:
         v = copy.copy(self.zero)
         for token in self.bag[i]:
             v[token] = self.tfPerDoc(token,i)
-
         return v
 
     def docFreq(self):
@@ -56,6 +56,12 @@ class bag_of_words:
                     counter+=1
             v[key] = counter
         return v
+
+    def idf(self,word):
+        return 1/self.docFreq()[word]
+
+    def logIdf(self,word):
+        return math.log(self.idf(word))
 
     def tfidf(self,word,i):
         bag = self.bag[i]
