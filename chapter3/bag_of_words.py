@@ -96,6 +96,26 @@ class bag_of_words:
         w = dict2array(self.tfVectorByDict(j))
         return cosine(v,w)
 
+    def doc2tfidf(self,query):
+        # map a new document to a tfidf vector
+        w = copy.copy(self.zero)
+        counts = Counter(query)
+        for k,v in counts.items():
+            freq = 0
+            for bag in self.bag:
+                if k in bag:
+                    freq+=1
+            if freq == 0:
+                continue
+            tf = v/len(query)
+            idf = len(self.bag)/freq
+            w[k] = tf*idf
+        return w
+
+    def cosine_similarity_query(self,i,query):
+        v = dict2array(self.tfVectorByDict(i))
+        w = dict2array(self.doc2tfidf(query))
+        return cosine(v,w)
 
 def dict2array(d):
     # helper for mapping dictionary values to np arrays
