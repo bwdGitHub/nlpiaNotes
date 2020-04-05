@@ -1,10 +1,13 @@
 # Linear Discrimnant Analysis (LDA) - a simple classification technique.
 # Perform binary classification by finding the line between the centroids of the two classes
+
+# Note - lots of things here throw warnings unfortunately.
 import pandas as pd
 from nlpia.data.loaders import get_data
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize.casual import casual_tokenize
 from sklearn.preprocessing import MinMaxScaler
+from pugnlp.stats import Confusion
 
 def get_sms_data():
     # the data is 4837 sms messages of which 638 are spam
@@ -77,3 +80,10 @@ def evaluate():
     incorrect = (sms.spam - sms.lda_predict).abs().sum()/len(sms)
     acc = 1 - incorrect
     print(acc)
+
+def confusion():
+    # compute confusion matrix
+    sms = preprocess()
+    sms = append_lda_details(sms)
+    # return the chart so it can be displayed
+    return Confusion(sms[['spam', 'lda_predict']])
