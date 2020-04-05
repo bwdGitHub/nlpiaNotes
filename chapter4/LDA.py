@@ -1,0 +1,1 @@
+# Linear Discrimnant Analysis (LDA) - a simple classification technique.
