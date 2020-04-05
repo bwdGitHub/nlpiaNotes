@@ -4,6 +4,7 @@ import pandas as pd
 from nlpia.data.loaders import get_data
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize.casual import casual_tokenize
+from sklearn.preprocessing import MinMaxScaler
 
 def get_sms_data():
     # the data is 4837 sms messages of which 638 are spam
@@ -56,3 +57,23 @@ def sms_self_spam_score():
     sms = preprocess()
     data = encode(sms.text)
     return sms_spam_score(data)
+
+def normalize_scores(scores):
+    # MinMax scale the scores.
+    # Note - scores have to be reshaped for the above data.
+    return MinMaxScaler().fit_transform(scores)
+
+def append_lda_details(sms):    
+    # append the normalized scores and predictions to the dataframe
+    scores = sms_self_spam_score()
+    sms['lda_score'] = normalize_scores(scores.reshape(-1,1))
+    sms['lda_predict'] = (sms.lda_score>0.5).astype(int)
+    return sms
+
+def evaluate():
+    # evaluate the above model - should get about 97.7% accuracy
+    sms = preprocess()
+    sms = append_lda_details(sms)
+    incorrect = (sms.spam - sms.lda_predict).abs().sum()/len(sms)
+    acc = 1 - incorrect
+    print(acc)
