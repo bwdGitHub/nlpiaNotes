@@ -46,6 +46,9 @@ def mse(A,B):
     # don't commit errors, no one will know
     return np.sqrt((((A-B).flatten()**2).sum())/np.product(A.shape))
 
+# plot dims_to_drop against reconstruction_error to set how this decreases.
+# since this is svd, some dimensions can be "removed" for free (the BOW/TFIDF matrix had lower rank than the number of words)
+
 
 
 
