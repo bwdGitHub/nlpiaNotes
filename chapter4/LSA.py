@@ -26,3 +26,26 @@ def catdog_svd():
 
     return (U,S,Vt)
 
+# Since the important singular values are already aranged to the left of S
+# You can compress U into topics by removing columns on the right.
+# It helps to have a metric for how much information is lost
+
+def reconstruction_error(dims_to_drop,tdm):
+    U,s,Vt = np.linalg.svd(tdm)
+    for dim_to_drop in range(len(s),len(s)-dims_to_drop,-1):
+        s[dim_to_drop-1] = 0    
+    S_approx = np.diag(s)
+    zeros = np.zeros((S_approx.shape[0],Vt.shape[0]-S_approx.shape[1]))
+    S_approx = np.concatenate((S_approx,zeros),axis=1)
+    reconstruction = U.dot(S_approx).dot(Vt)
+    e = mse(tdm.values,reconstruction)
+    return e
+
+def mse(A,B):
+    # protip: use as many parentheses as possible to look smart
+    # don't commit errors, no one will know
+    return np.sqrt((((A-B).flatten()**2).sum())/np.product(A.shape))
+
+
+
+
