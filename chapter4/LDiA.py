@@ -56,4 +56,38 @@ def append_predictions():
 # i'm too lazy to continue following this - the book shows why tfidf would overfit here, hence motivating topic modelling
 # tfidf overfits on an LDA classifier.
 
+def LDA_again():
+    from PCA import get_sms_data
+    (tfidf_docs,sms,tfidf) = get_sms_data()
+    from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+    mdl = LDA(n_components=1)
+    mdl = mdl.fit(tfidf_docs,sms.spam)
+    sms['lda_spam_prediction']=mdl.predict(tfidf_docs)
+    error = ((sms.spam-sms.lda_spam_prediction)**2.0).sum()**.5
+    print(error)
+    from sklearn.model_selection import cross_val_score
+    mdl = LDA(n_components=1)
+    scores = cross_val_score(mdl,tfidf_docs,sms.spam,cv=5)
+    print("Acc:{:.2f}(+/-{:.2f})".format(scores.mean(), scores.std()*2))
+
+def LDA_with_PCA():
+    from PCA import sms_pca, get_sms_data
+    (tfidf_docs,sms,tfidf) = get_sms_data()
+    (topics,pca) = sms_pca(tfidf_docs,sms)
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(topics.values, sms.spam, test_size = 0.3, random_state = 271828)
+    from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+    mdl = LDA(n_components=1)
+    from sklearn.model_selection import cross_val_score
+    scores = cross_val_score(mdl,topics, sms.spam, cv=10)
+    print("{:.2f}(+/-{:.2f}".format(scores.mean(),scores.std()*2))
+
+# the chapter ends by discussing the problem of semantic search
+# even 16 dimensional topic vectors are somewhat unmanageable for indexing
+# and computing cosine distance  across a huge corpus is time consuming
+# approximation methods are used instead
+# see Spotify - annoy or gensim KeyedVector.
+
+
+
 
