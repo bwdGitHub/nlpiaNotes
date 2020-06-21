@@ -67,7 +67,6 @@ class bag_of_words:
         return math.log(self.idf(word))
 
     def tfidf(self,word,i):
-        bag = self.bag[i]
         v = self.tfVectorByDict(i)
         df = self.docFreq()
         if word not in df or df[word]<1e-10:
@@ -76,7 +75,6 @@ class bag_of_words:
             return v[word]/df[word]
 
     def logTfIdf(self,word,i):
-        bag = self.bag[i]
         v = self.tfVectorByDict(i)
         logIdf = self.logIdf(word)
         return v[word]/logIdf
